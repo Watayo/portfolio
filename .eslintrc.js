@@ -3,6 +3,7 @@
 module.exports = {
   root: true,
   parserOptions: {
+<<<<<<< HEAD
     parser: 'babel-eslint'
   },
   env: {
@@ -27,3 +28,24 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   }
 }
+=======
+    parser: "babel-eslint"
+  },
+  env: {
+    browser: true
+  },
+  extends: [
+    'plugin:vue/essential',
+    'eslint:recommended',
+  ],
+  // required to lint *.vue files
+  plugins: ["vue"],
+  // add your custom rules here
+  rules: {
+    // allow async-await
+    "generator-star-spacing": "off",
+    // allow debugger during development
+    "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
+  }
+};
+>>>>>>> 0b220c351add1db25b56b4275d12847b058ae7cd
