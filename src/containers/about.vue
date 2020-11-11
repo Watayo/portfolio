@@ -79,10 +79,11 @@ export default {
 
 .index-wrapper {
   width: 600px;
+  padding: 0 10px;
 }
 
 .index-wrapper table {
-  width: 80%;
+  width: 100%;
   margin: auto;
   border-collapse: collapse;
   border-spacing: 0;
@@ -101,6 +102,7 @@ table td {
 
 .myphoto-wrapper {
   width: 300px;
+  padding: 0 10px;
 }
 
 .profile-photo {

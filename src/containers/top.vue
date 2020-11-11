@@ -1,18 +1,24 @@
 <template>
   <div id="top">
-    <rotate-box></rotate-box>
+    <top3D></top3D>
   </div>
 </template>
 
 <script>
-import RotateBox from "@/components/RotateBox";
+import Top3D from "@/components/top3D";
 
 export default {
   name: "Top",
   components: {
-    RotateBox
+    Top3D
   }
 };
 </script>
 
-<style></style>
+<style scoped>
+#top {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+</style>
