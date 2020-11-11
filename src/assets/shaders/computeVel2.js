@@ -136,7 +136,7 @@ void main(){
     snoise( vec4( i * pos.xyz, 1.259 + 0.7 * time ) )
   ) * 0.2;
   // vel += -pos * length(pos) * 0.001;
-  vel.xyz *= 0.9 + abs(sin(uv.y * 9.0)) * 0.03;
+  vel.xyz *= 0.9 + abs(sin(uv.y * 9.0)) * 0.05;
 
   gl_FragColor = vec4( vel.xyz, 1.0 );
 }
