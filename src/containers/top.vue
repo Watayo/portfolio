@@ -1,5 +1,18 @@
 <template>
   <div id="top">
-    <h1>Top</h1>
+    <rotate-box></rotate-box>
   </div>
 </template>
+
+<script>
+import RotateBox from "@/components/RotateBox";
+
+export default {
+  name: "Top",
+  components: {
+    RotateBox
+  }
+};
+</script>
+
+<style></style>

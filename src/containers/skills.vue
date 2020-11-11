@@ -1,7 +1,13 @@
 <template>
-<<<<<<< HEAD
-  <section id="skills">
+  <section id="skills" class="skills-wrapper">
     <pageSection title="Skills" />
+    <div class="skill-wrapper">
+      <ul>
+        <li v-for="skill in skills" :key="skill.content">
+          {{ skill.content }}
+        </li>
+      </ul>
+    </div>
   </section>
 </template>
 
@@ -9,15 +15,30 @@
 import PageSection from "@/components/pageSection";
 
 export default {
-  name: "About",
+  name: "Skills",
   components: {
-    PageSection,
+    PageSection
   },
+  data() {
+    return {
+      skills: [
+        { content: "C++ : openFrameworks" },
+        { content: "Shader : GLSL ( a little... )" },
+        { content: "javaScript : Node.js, Three.js, Vue.js" },
+        { content: "Ruby : sinatra, Ruby on Rails" },
+        { content: "HTML & CSS" }
+      ]
+    };
+  }
 };
 </script>
-=======
-  <div id="skills">
-    <h1>Skills</h1>
-  </div>
-</template>
->>>>>>> 0b220c351add1db25b56b4275d12847b058ae7cd
+
+<style scoped>
+.about-wrapper {
+  margin-bottom: 40px;
+}
+.skill-wrapper {
+  margin: auto;
+  width: 400px;
+}
+</style>

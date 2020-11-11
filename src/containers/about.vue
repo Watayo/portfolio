@@ -2,24 +2,26 @@
   <section id="about" class="about-wrapper">
     <pageSection title="About" />
     <div class="box-wrapper">
-      <table>
-        <tbody>
-          <tr v-for="(content, index) in contents" :key="index">
-            <th>{{ content.key }}</th>
-            <td v-if="content.url">
-              <a :href="content.url">
+      <div class="index-wrapper">
+        <table>
+          <tbody>
+            <tr v-for="(content, index) in contents" :key="index">
+              <th>{{ content.key }}</th>
+              <td v-if="content.url">
+                <a :href="content.url">
+                  {{ content.value }}
+                </a>
+              </td>
+              <td v-else>
                 {{ content.value }}
-              </a>
-            </td>
-            <td v-else>
-              {{ content.value }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="myphoto-wrapper">
-      <img class="profile-photo" src="@/assets/img/myphoto.jpg" alt="" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="myphoto-wrapper">
+        <img class="profile-photo" src="@/assets/img/myphoto.jpg" alt="" />
+      </div>
     </div>
   </section>
 </template>
@@ -66,8 +68,43 @@ export default {
 </script>
 
 <style scoped>
+.about-wrapper {
+  margin-bottom: 40px;
+}
+
+.box-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.index-wrapper {
+  width: 600px;
+}
+
+.index-wrapper table {
+  width: 80%;
+  margin: auto;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.index-wrapper tr {
+  border-bottom: solid 1px #eee;
+}
+
+.index-wrapper table th,
+table td {
+  text-align: center;
+  width: 15%;
+  padding: 14px 0;
+}
+
+.myphoto-wrapper {
+  width: 300px;
+}
+
 .profile-photo {
-  width: 30%;
+  width: 290px;
   height: auto;
 }
 </style>
