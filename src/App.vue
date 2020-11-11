@@ -38,7 +38,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 30px;
+  margin-top: 15px;
+}
+
+.app-header {
+  margin-bottom: 15px;
 }
 
 nav {

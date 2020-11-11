@@ -1,20 +1,22 @@
 import * as THREE from "three";
-import { cherryPos } from './shaders/cherryPos.js';
-import { cherryVel } from './shaders/cherryVel.js';
-import { cherryfrag } from './shaders/cherryfrag.js';
-import { cherryvert } from './shaders/cherryvert.js';
-
+import { computePos } from '../shaders/computePos.js';
+import { computeVel } from '../shaders/computeVel.js';
+import { computeVel2 } from '../shaders/computeVel2.js';
+import { trailfrag } from '../shaders/trailfrag.js';
+import { trailvert } from '../shaders/trailvert.js';
 
 import { GPUComputationRenderer } from 'three/examples/jsm/misc/GPUComputationRenderer';
 
-export default class Cherry {
 
-  constructor(renderer, width, x, y, z) {
+
+export default class Trails {
+
+  constructor(renderer, num, length) {
     this.renderer = renderer;
 
     this.computeRenderer;
-    this.width = width;
-    this.particles = width * width;
+    this.num = num;
+    this.length = length;
 
     this.obj;
 
@@ -32,16 +34,12 @@ export default class Cherry {
       },
     }
 
-    this.x = x;
-    this.y = y;
-    this.z = z;
-
     this.initComputeRenderer();
-    this.createCherry();
+    this.createTrails();
   }
 
   initComputeRenderer() {
-    this.computeRenderer = new GPUComputationRenderer(this.width, this.width, this.renderer);
+    this.computeRenderer = new GPUComputationRenderer(this.length, this.num, this.renderer);
 
     let initPositionTex = this.computeRenderer.createTexture();
     let initVelocityTex = this.computeRenderer.createTexture();
@@ -49,9 +47,8 @@ export default class Cherry {
     this.initPosition(initPositionTex);
     // this.initVelocity(initVelocityTex);
 
-    // shader
-    this.comTexs.position.texture = this.computeRenderer.addVariable("texturePosition", cherryPos, initPositionTex);
-    this.comTexs.velocity.texture = this.computeRenderer.addVariable("textureVelocity", cherryVel, initVelocityTex);
+    this.comTexs.position.texture = this.computeRenderer.addVariable("texturePosition", computePos, initPositionTex);
+    this.comTexs.velocity.texture = this.computeRenderer.addVariable("textureVelocity", computeVel2, initVelocityTex);
 
     this.computeRenderer.setVariableDependencies(this.comTexs.position.texture, [this.comTexs.position.texture, this.comTexs.velocity.texture]);
     this.comTexs.position.uniforms = this.comTexs.position.texture.material.uniforms;
@@ -65,7 +62,6 @@ export default class Cherry {
 
   update() {
     this.time += this.clock.getDelta();
-    this.uni.time.value = this.time;
 
     this.computeRenderer.compute();
     this.comTexs.velocity.uniforms.time.value = this.time;
@@ -75,29 +71,17 @@ export default class Cherry {
 
   initPosition(tex) {
     var texArray = tex.image.data;
-    let r = 3;
-
-    for (let i = 0; i < texArray.length; i += 4) {
-      let x, y, z, rr;
-      do {
-
-        x = (Math.random() * 2 - 1) * r;
-        y = (Math.random() * 2 - 1) * r;
-        z = (Math.random() * 2 - 1) * r;
-
-        rr = x * x + y * y + z * z;
-
-      } while (rr > r);
-
-      rr = Math.sqrt(rr);
-      x *= rr;
-      z *= rr;
-      y *= rr;
-
-      texArray[i + 0] = x + this.x;
-      texArray[i + 1] = y + this.y;
-      texArray[i + 2] = z + this.z;
-      texArray[i + 3] = 0.0;
+    let range = new THREE.Vector3(5, 5, 5);
+    for (var i = 0; i < texArray.length; i += this.length * 4) {
+      let x = Math.random() * range.x - range.x / 2;
+      let y = 30;
+      let z = Math.random() * range.z - range.z / 2;
+      for (let j = 0; j < this.length * 4; j += 4) {
+        texArray[i + j + 0] = x;
+        texArray[i + j + 1] = y;
+        texArray[i + j + 2] = z;
+        texArray[i + j + 3] = 0.0;
+      }
     }
   }
 
@@ -111,44 +95,49 @@ export default class Cherry {
   //     }
   // }
 
-  createCherry() {
+  createTrails() {
     let geo = new THREE.BufferGeometry();
-    let position = new Float32Array(this.particles * 3);
-    let p = 0;
-    for (let i = 0; i < this.particles; i++) {
-      position[p++] = 0;
-      position[p++] = 0;
-      position[p++] = 0;
-    }
 
-    let uv = new Float32Array(this.particles * 2);
-    p = 0;
-    for (let j = 0; j < this.width; j++) {
-      for (let k = 0; k < this.width; k++) {
-        uv[p++] = k / (this.width - 1);
-        uv[p++] = j / (this.width - 1);
+    let pArray = new Float32Array(this.num * this.length * 3);
+    let indices = new Uint32Array((this.num * this.length - 1) * 3);
+    let uv = new Float32Array(this.num * this.length * 2);
+
+    let max = this.length * this.n;
+
+    for (let i = 0; i < this.num; i++) {
+      for (let j = 0; j < this.length; j++) {
+        let c = i * this.length + j;
+        let n = (c) * 3;
+        pArray[n] = 0;
+        pArray[n + 1] = 0;
+        pArray[n + 2] = 0;
+
+        uv[c * 2] = j / this.length;
+        uv[c * 2 + 1] = i / this.num;
+
+        indices[n] = c;
+        indices[n + 1] = Math.min(c + 1, i * this.length + this.length - 1);
+        indices[n + 2] = Math.min(c + 1, i * this.length + this.length - 1);
       }
     }
 
-    geo.addAttribute('position', new THREE.BufferAttribute(position, 3));
+    geo.addAttribute('position', new THREE.BufferAttribute(pArray, 3));
     geo.addAttribute('uv', new THREE.BufferAttribute(uv, 2));
+    geo.setIndex(new THREE.BufferAttribute(indices, 1));
 
-    const loader = new THREE.TextureLoader();// テクスチャローダーを作成
-    const texture = loader.load('../Assets/asset5.png');// テクスチャ読み込み
     this.uni = {
-      time: { value: 0.0 },
-      cherry: { value: texture },
       texturePosition: { value: null },
       textureVelocity: { value: null },
     }
 
     let mat = new THREE.ShaderMaterial({
       uniforms: this.uni,
-      vertexShader: cherryvert,
-      fragmentShader: cherryfrag,
+      vertexShader: trailvert,
+      fragmentShader: trailfrag,
     });
+    mat.wireframe = true;
 
-    this.obj = new THREE.Points(geo, mat);
+    this.obj = new THREE.Mesh(geo, mat);
     this.obj.matrixAutoUpdate = false;
     this.obj.updateMatrix();
   }
