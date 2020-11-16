@@ -56,9 +56,9 @@ export default {
           url: "https://www.facebook.com/profile.php?id=100034536423329"
         },
         {
-          key: "Twitter",
-          value: "@watayo",
-          url: "https://twitter.com/"
+          key: "Instagram",
+          value: "watayo_1111",
+          url: "https://www.instagram.com/watayo_1111/"
         },
         { key: "Mail", value: "ryo0616mani@gmail.com", url: "" }
       ]

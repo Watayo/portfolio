@@ -12,7 +12,10 @@ import { normalvert } from "@/assets/shaders/normalvert.js";
 
 import { GPUComputationRenderer } from "three/examples/jsm/misc/GPUComputationRenderer";
 
-import Trails from "@/assets/myThreeLib/Trails.js";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
+
 export default {
   name: "Top3D",
   data() {
@@ -40,6 +43,10 @@ export default {
     let particleUniforms;
     let effectController;
     let particleGeo;
+
+    let renderPass;
+    let composer;
+
     return {
       scene,
       renderer,
@@ -56,7 +63,9 @@ export default {
       velocityUniforms,
       particleUniforms,
       effectController,
-      particleGeo
+      particleGeo,
+      renderPass,
+      composer
     };
   },
   mounted() {
@@ -73,7 +82,7 @@ export default {
 
     // camera setting
     {
-      this.camera.position.set(0, 0, 300);
+      this.camera.position.set(0, 0, 120);
     }
 
     // light
@@ -82,11 +91,21 @@ export default {
       this.scene.add(this.light);
     }
 
-    // obj
+    // composer, renderPass
     {
-      //this.scene.add(this.cube);
-      // trail = new Trails(this.renderer, 200, 200);
-      // this.scene.add(this.trail.obj);
+      this.renderPass = new RenderPass(this.scene, this.camera);
+
+      const bloomPass = new UnrealBloomPass(
+        new THREE.Vector2(window.innerWidth, window.innerHeight),
+        1.3,
+        0.8,
+        0.8
+      );
+
+      this.composer = new EffectComposer(this.renderer);
+
+      this.composer.addPass(this.renderPass);
+      this.composer.addPass(bloomPass);
     }
 
     // functiions
@@ -198,8 +217,11 @@ export default {
       for (let k = 0, kl = posArray.length; k < kl; k += 4) {
         // Position
         let x, y, z;
-        x = Math.random() * 400 - 200;
-        z = Math.random() * 400 - 200;
+        const range = 300;
+        x = Math.random() * range - range / 2;
+        // x = 0;
+        z = Math.random() * range - range / 2;
+        // z = 0;
         y = 0;
         // posArrayの実態は一次元配列なので
         // x,y,z,wの順番に埋めていく。
@@ -226,7 +248,7 @@ export default {
     animate() {
       requestAnimationFrame(this.animate);
       this.render();
-      // this.trail.update();
+      this.composer.render();
     },
     onResize() {
       // rendererのサイズを調整
