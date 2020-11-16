@@ -2,6 +2,7 @@
   <div id="app">
     <header class="app-header">
       <nav id="nav">
+        <p>Watayo's dev</p>
         <ul>
           <li>
             <router-link class="nav-tag" to="/">Top</router-link>
@@ -46,20 +47,31 @@ body {
 }
 
 nav {
-  width: 90%;
+  width: 95%;
+  display: inline-flex;
+}
+
+nav p {
+  margin: 0;
+  padding: 0;
+  flex-basis: 60%;
+  text-align: left;
+  font-weight: bold;
 }
 
 nav ul {
   margin: 0;
   padding: 0;
+  flex-basis: 40%;
   text-align: right;
 }
 
 nav ul li {
   list-style: none;
   display: inline-block;
-  text-align: center;
-  width: 10%; /* ここで項目の幅を指定します */
+
+  margin-left: 30px;
+  /* ここで項目の幅を指定します */
 }
 
 .nav-tag {

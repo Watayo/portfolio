@@ -159,9 +159,9 @@ void main(){
   vec3 pos=texture2D(texturePosition,uv).xyz;
   vec3 vel=texture2D(textureVelocity,uv).xyz;
 
-  vel+=curlNoise(0.0025 * pos,idParticle)*30.;
+  vel+=curlNoise(0.0025 * pos,idParticle)*20.;
   //  vel -= snoiseDelta( 0.00010 * pos) * 0.1;
-  vel-=normalize(0.0025 * pos)*length(0.0025 * pos)*1.5;
+  vel-=normalize(0.0025 * pos)*length(0.0025 * pos)*1.7;
   vel*=.63;
 
   gl_FragColor=vec4(vel.xyz,1.);
