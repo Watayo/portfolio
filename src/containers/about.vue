@@ -8,7 +8,11 @@
             <tr v-for="(content, index) in contents" :key="index">
               <th>{{ content.key }}</th>
               <td v-if="content.url">
-                <a :href="content.url">
+                <a
+                  :href="content.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {{ content.value }}
                 </a>
               </td>
@@ -98,6 +102,11 @@ table td {
   text-align: center;
   width: 15%;
   padding: 14px 0;
+}
+
+.index-wrapper table th,
+table td a {
+  text-decoration: none;
 }
 
 .myphoto-wrapper {
