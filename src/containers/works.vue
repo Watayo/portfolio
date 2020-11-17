@@ -47,7 +47,7 @@ export default {
           content: "蓮の花を表現しました.",
           photo: "./static/worksImg/neonLotus.png",
           subContent: "p5.js",
-          link: ""
+          link: "https://editor.p5js.org/watayo/full/4QSsHmB9O"
         },
         {
           name: "ToQ",
